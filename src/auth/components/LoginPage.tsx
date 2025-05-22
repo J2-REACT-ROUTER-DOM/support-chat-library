@@ -27,6 +27,8 @@ export function LoginPage({
     localStorage.setItem("token", data.token);
     // Todo: invalidar query del usuario
     //! Borramos el cache de la query user
+    console.log("invalidando query");
+    //Cada vez que se invalida la query, se vuelve a ejecutar el useQuery en el AppRouter y va ejecutar el checkAuth y crear en el cache de la entrada user.
     queryClient.invalidateQueries({ queryKey: ["user"] });
     //! al navegar a /chat se vuelve a ejecutar el useQuery en el AppRouter y va ejecutar el checkAuth y crear en el cache de la entrada user.
     navigate("/chat", { replace: true });

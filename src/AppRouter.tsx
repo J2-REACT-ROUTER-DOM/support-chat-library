@@ -24,10 +24,12 @@ const MyNoChatSelected = React.lazy(
 );
 export const AppRouter = () => {
   //! Hacemos la verificacion del token que debe de estar en el localStorage
+  //! Cada vez que se invalida la query, se vuelve a ejecutar el useQuery en el AppRouter y va ejecutar el checkAuth y crear en el cache de la entrada user.
   const { data: user, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: () => {
       const token = localStorage.getItem("token");
+      console.log("token", token);
       if (!token) {
         throw new Error("No token found");
       }
@@ -37,10 +39,9 @@ export const AppRouter = () => {
   });
 
   if (isLoading) {
-    console.log("Verificando token...");
     return <MySpinner />;
   }
-  
+
   // if (isError) {
   //   console.log("Error al verificar el token", error);
   //   return <div>{error.message}</div>;
@@ -59,7 +60,7 @@ export const AppRouter = () => {
           element={
             <Suspense fallback={<MySpinner />}>
               {/* Envolvemos el componente MyChatLayout con el componente PrivateRoute para que solo se pueda acceder a la pagina de chat si el usuario esta autenticado */}
-              
+
               {/* En este punto user puede ser undefined o un objeto */}
               <PrivateRoute isAuthenticated={Boolean(user)}>
                 <MyChatLayout />
